@@ -1,5 +1,13 @@
 import socket, time
 
+def hangman(word_given, def_given, cl1, cl2):
+	print(word_given, def_given)
+	guessed = ["_"] * len(word_given)
+	attempts_left = 6
+	print(f"Word: {word_given}")
+	print(f"Definition: {def_given}")
+	
+
 def main():
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	s.bind(("127.0.0.1",1234))
@@ -21,6 +29,7 @@ def main():
 	(client2, address2) = s.accept()
 	print("Client 2 connected at address:", address2)
 	
+	hangman(word,definition,address1,address2)
 	
 	client1.close()
 	client2.close()
