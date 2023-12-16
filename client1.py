@@ -2,7 +2,7 @@ import socket,time
 
 def main():
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	s.connect(("127.0.0.1",1234))
+	s.connect(("127.0.0.1",1235))
 	
 	# Send to server required infos
 	q1 = s.recv(1024).decode()
