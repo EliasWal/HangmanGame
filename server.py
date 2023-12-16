@@ -1,30 +1,41 @@
 import socket, time
 
-def hangman(word_given, def_given, cl1, cl2):
-	guessed = ["_"] * len(word_given)
-	attempts_left = 6
-	print(f"Word: {word_given}")
-	print(f"Definition: {def_given}")
-	cl2.sendall(f"Definition: {def_given}".encode())
-	
-	while "_" in guessed and attempts_left > 0:
-		aux = " ".join(guessed)
-		# cl1.sendall(f"{aux} {attempts_left}".encode())
-		cl2.sendall(f"{aux} {attempts_left}".encode())
+def hangman(word_given, def_given, cl2):
+    guessed = ["_"] * len(word_given)
+    attempts_left = 6
+    # print(f"Word: {word_given}")
+    # print(f"Definition: {def_given}")
+    #Send definition to client 2
+    cl2.sendall(f"Definition: {def_given}".encode())
+    word_given = word_given.lower()
 
-		guess = cl2.recv(1024).decode().lower()
-		print(guess)
-		
-		if guess in word_given:
-			for i in range(len(word_given)):
-				if word_given[i] == guess:
-					guessed[i] = guess
-		else:
-			attempts_left = -1
+    while "_" in guessed and attempts_left > 0:
+        aux = " ".join(guessed)
+        cl2.sendall(f"{aux} {attempts_left}".encode())
+
+        guess = cl2.recv(1024).decode().lower()
+        print(guess)
+
+        if guess in word_given:
+            for i in range(len(word_given)):
+                if word_given[i] == guess:
+                    guessed[i] = guess
+        else:
+            attempts_left -= 1
+
+        if "_" in guessed and attempts_left > 0:
+            cl2.sendall(f"{aux} {attempts_left}".encode())
+
+    if "_" not in guessed:
+        cl2.sendall("You won!".encode())
+    else:
+        cl2.sendall("You lost!".encode())
+
+	
 
 def main():
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	s.bind(("127.0.0.1",1234))
+	s.bind(("127.0.0.1",1235))
 	s.listen()
 	
 	print("Waiting for first client to connect")
@@ -44,7 +55,7 @@ def main():
 	print("Definition:",definition)
 	
 	
-	hangman(word,definition,client1,client2)
+	hangman(word,definition,client2)
 	
 	client1.close()
 	client2.close()
