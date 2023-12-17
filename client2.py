@@ -10,7 +10,7 @@ def main():
 	
 	while True:
 		response = s.recv(1024).decode()
-		print("Hei: " , response)
+		print("Status: " , response)
 
 		if "You won!" in response or "You lost!" in response:
 			break
