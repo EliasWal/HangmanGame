@@ -1,5 +1,6 @@
 import socket, time
 
+
 def hangman(word_given, def_given,cl1, cl2):
     guessed = ["_"] * len(word_given)
     attempts_left = 6
@@ -41,6 +42,7 @@ def main():
 	print("Client 1 connected at address:",address1)
 	
 	print("Waiting for second client to connect")
+	client1.sendall("Wait for second client to connect. Think about a word!".encode())
 	(client2, address2) = s.accept()
 	print("Client 2 connected at address:", address2)
 	
