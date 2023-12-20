@@ -4,6 +4,9 @@ def main():
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	s.connect(("127.0.0.1",1235))
 	
+	msg = s.recv(1024).decode()
+	print(msg)
+	
 	# Send to server required infos
 	q1 = s.recv(1024).decode()
 	print(q1)
@@ -25,6 +28,8 @@ def main():
 			break
 		else:
 			print("Status: ", response)
+	
+	s.close()
 
 if __name__ == "__main__":
 	main()
