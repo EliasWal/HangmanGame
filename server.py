@@ -1,14 +1,17 @@
 import socket, time
 
-def hangman(word_given, def_given, cl2):
+def hangman(word_given, def_given,cl1, cl2):
     guessed = ["_"] * len(word_given)
     attempts_left = 6
+    
+    word_given=word_given.lower()
 
     cl2.sendall(f"Definition: {def_given}".encode())
 
     while "_" in guessed and attempts_left > 0:
         aux = " ".join(guessed)
         cl2.sendall(f"{aux} {attempts_left}".encode())
+        cl1.sendall(f"{aux} {attempts_left}".encode())
         guess = cl2.recv(1024).decode().lower()
         print(guess)
 
@@ -21,8 +24,10 @@ def hangman(word_given, def_given, cl2):
 
     if "_" not in guessed:
         cl2.sendall(f"You won! The word was {word_given}".encode())
+        cl1.sendall(f"You won! The word was {word_given}".encode())
     else:
         cl2.sendall(f"You lost! The word was {word_given}".encode())
+        cl1.sendall(f"You lost! The word was {word_given}".encode())
 
 	
 
@@ -47,7 +52,7 @@ def main():
 	definition = client1.recv(1024).decode()
 	print("Definition:",definition)
 	
-	hangman(word,definition,client2)
+	hangman(word,definition,client1,client2)
 	
 	client1.close()
 	client2.close()
