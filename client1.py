@@ -14,7 +14,17 @@ def main():
 	print(q2)
 	definition = input()
 	s.send(definition.encode())
-
+	
+	while True:
+		response = s.recv(1024).decode()
+		if "You won!" in response:
+			print("Client 2 won the game!")
+			break
+		elif "You lost!" in response:
+			print("Client 2 lost the game!")
+			break
+		else:
+			print("Status: ", response)
 
 if __name__ == "__main__":
 	main()
